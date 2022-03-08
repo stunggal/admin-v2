@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Doc extends Model
 {
     use HasFactory;
+
+    protected $guard = [
+        'id',
+    ];
 }

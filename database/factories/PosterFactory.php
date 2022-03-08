@@ -17,7 +17,8 @@ class PosterFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'poster' => $this->faker->mimeType(),
+            'event' => mt_rand(1, 10),
         ];
     }
 }

@@ -1,7 +1,7 @@
 @extends('layout.index')
 
 @section('container')
-    {{-- @dd($data) --}}
+    {{-- @dd($data->where('status_id', 1)->count()) --}}
     <main id="main" class="main">
 
         <div class="pagetitle">
@@ -36,7 +36,10 @@
                                 </div>
 
                                 <div class="card-body">
-                                    <h5 class="card-title">UKM <span>| Events</span></h5>
+                                    <h5 class="card-title">UKM
+                                        {{ $d = $data->where('organizer', 'like', 'ukm')->count() }}
+                                        <span>| Events {{ date('Y-m-d h:m:s') }} </span>
+                                    </h5>
 
                                     <div class="d-flex align-items-center">
                                         <div
@@ -44,7 +47,7 @@
                                             <i class="bi ri-steam-line"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <h6>145</h6>
+                                            <h6>{{ $data->where('organizer', 'ukm')->count() }}</h6>
                                             <span class="text-success small pt-1 fw-bold">12</span> <span
                                                 class="text-muted small pt-2 ps-1">events today</span>
 
@@ -79,7 +82,7 @@
                                             <i class="bi ri-user-line"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <h6>264</h6>
+                                            <h6>{{ $data->where('organizer', 'departemen')->count() }}</h6>
                                             <span class="text-success small pt-1 fw-bold">8</span> <span
                                                 class="text-muted small pt-2 ps-1">events today</span>
 
@@ -116,7 +119,7 @@
                                             <i class="bi ri-spy-line"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <h6>1244</h6>
+                                            <h6>{{ $data->where('organizer', 'hmp')->count() }}</h6>
                                             <span class="text-danger small pt-1 fw-bold">12</span> <span
                                                 class="text-muted small pt-2 ps-1">events today</span>
 
@@ -159,18 +162,21 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{-- @foreach ($data as $d) --}}
-                                            <tr>
-                                                <th scope="row"><a href="#">1</a></th>
-                                                <td><a href="#" class="text-primary">d</a></td>
-                                                <td>d</td>
-                                                <td>d</td>
-                                                <td><span class="badge bg-success">d</span></td>
-                                                <td>
-                                                    <a href="#" class="badge bg-primary">update</a>
-                                                </td>
-                                            </tr>
-                                            {{-- @endforeach --}}
+                                            @foreach ($data as $d)
+                                                <tr>
+                                                    <th scope="row"><a href="#">{{ $d->id }}</a></th>
+                                                    <td><a href="#" class="text-primary">{{ $d->name }}</a></td>
+                                                    <td>{{ $d->executing }}</td>
+                                                    <td>{{ $d->organizer }}</td>
+                                                    <td><span
+                                                            class="badge bg-{{ $d->status->name === 'aproved' ? 'primary' : '' }}{{ $d->status->name === 'pending' ? 'danger' : '' }}{{ $d->status->name === 'started' ? 'success' : '' }}{{ $d->status->name === 'finished' ? 'dark' : '' }} ">{{ $d->status->name }}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a href=" #" class="badge bg-success">see</a>
+                                                        <a href="#" class="badge bg-primary">update</a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
 

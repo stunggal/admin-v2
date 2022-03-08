@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
+            $table->integer('user');
+            $table->integer('event');
             $table->timestamps();
         });
     }

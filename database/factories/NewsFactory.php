@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Comitte>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\News>
  */
-class ComitteFactory extends Factory
+class NewsFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,9 @@ class ComitteFactory extends Factory
     public function definition()
     {
         return [
-            'user' => mt_rand(1, 50),
-            'event' => mt_rand(1, 10),
+            'event_id' => mt_rand(1, 10),
+            'title' => $this->faker->sentence(),
+            'file' => $this->faker->mimeType(),
         ];
     }
 }

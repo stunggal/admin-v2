@@ -17,7 +17,8 @@ class DocFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'img' => $this->faker->imageUrl(360, 360, 'animals', true, 'cats'),
+            'news' => mt_rand(1, 10),
         ];
     }
 }

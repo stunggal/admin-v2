@@ -17,7 +17,8 @@ class ParticipantFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'user' => mt_rand(1, 50),
+            'event' => mt_rand(1, 10),
         ];
     }
 }
