@@ -19,8 +19,19 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->timestamp('email_verified_at')->nullable();
-            $table->integer('role');
-            $table->string('contact');
+            $table->foreignId('role_id')->default('2');
+            $table->string('about')->nullable();
+            $table->string('fullName')->nullable();
+            $table->string('company')->nullable();
+            $table->string('job')->nullable();
+            $table->string('country')->nullable();
+            $table->string('address')->nullable();
+            $table->string('contact')->nullable();
+            $table->string('tweet')->nullable();
+            $table->string('fb')->nullable();
+            $table->string('ig')->nullable();
+            $table->string('in')->nullable();
+            $table->string('photo')->default('userpp.jpg');
             $table->timestamps();
         });
     }

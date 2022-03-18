@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Acara;
-use App\Models\Acaras;
-use App\Models\News;
-use App\Models\Role;
-use App\Models\User;
+use App\Models\Login;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
-class DashboardController extends Controller
+class LoginController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,16 +15,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        
-        $tgl = date('Y-m-d');
-        $dt = Carbon::create($tgl);
-        return view('dashboard.index', [
-            'data' => Acara::with(['news', 'status'])->get(),
-            'datas' => Acara::where('executing', $tgl)->get(),
-            'dt' => $dt,
-            'news' => News::latest('id')->get(),
-            // where('organizer', '2022-03-09')->andWhere('organizer', 'ukm')->count()
-        ]);
+        return view('login.index');
     }
 
     /**
@@ -55,10 +42,10 @@ class DashboardController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Login  $login
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Login $login)
     {
         //
     }
@@ -66,10 +53,10 @@ class DashboardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Login  $login
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Login $login)
     {
         //
     }
@@ -78,10 +65,10 @@ class DashboardController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Login  $login
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Login $login)
     {
         //
     }
@@ -89,11 +76,34 @@ class DashboardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Login  $login
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Login $login)
     {
         //
+    }
+    public function authenticate(Request $request){
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+            
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('/');
+        }
+
+        return back()->with('loginError', 'login failed!');
+    }
+
+    public function logout(Request $request){
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }

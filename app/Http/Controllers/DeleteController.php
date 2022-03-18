@@ -3,14 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Acara;
-use App\Models\Acaras;
-use App\Models\News;
-use App\Models\Role;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 
-class DashboardController extends Controller
+class DeleteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,16 +14,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        
-        $tgl = date('Y-m-d');
-        $dt = Carbon::create($tgl);
-        return view('dashboard.index', [
-            'data' => Acara::with(['news', 'status'])->get(),
-            'datas' => Acara::where('executing', $tgl)->get(),
-            'dt' => $dt,
-            'news' => News::latest('id')->get(),
-            // where('organizer', '2022-03-09')->andWhere('organizer', 'ukm')->count()
-        ]);
+        //
     }
 
     /**
@@ -55,10 +41,10 @@ class DashboardController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Acara  $acara
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Acara $acara)
     {
         //
     }
@@ -66,10 +52,10 @@ class DashboardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Acara  $acara
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Acara $acara)
     {
         //
     }
@@ -78,10 +64,10 @@ class DashboardController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Acara  $acara
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Acara $acara)
     {
         //
     }
@@ -89,11 +75,15 @@ class DashboardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Acara  $acara
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Acara $acara)
     {
-        //
+        return $acara;
+        Acara::destroy($acara);
+        // $request->session()->flash('success', 'registrasi berhasil harap login ulang');
+
+        return redirect('/')->with('success', 'data berhasil dihapus');
     }
 }

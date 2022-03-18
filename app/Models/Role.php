@@ -12,4 +12,9 @@ class Role extends Model
     protected $guard = [
         'id',
     ];
+
+    public function role(){
+        return $this->hasOne(User::class);
+    }
+
 }

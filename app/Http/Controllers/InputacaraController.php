@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Acara;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class InputacaraController extends Controller
@@ -34,7 +36,22 @@ class InputacaraController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return $request;
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'about' => 'required',
+            'executing' => '',
+            'time' => '',
+            'organizer' => '',
+            'place' => 'required|max:255',
+            'comitte' => '',
+            'responsible_id' => '',
+        ]);
+
+        Acara::create($validatedData);
+        // $request->session()->flash('success', 'registrasi berhasil harap login ulang');
+
+        return redirect('/list')->with('success', 'data berhasil di input');
     }
 
     /**
@@ -68,7 +85,7 @@ class InputacaraController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return '$request;';
     }
 
     /**
@@ -77,8 +94,13 @@ class InputacaraController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Acara $acara)
     {
-        //
+
+        // return $acara;
+        // Acara::destroy($acara->id);
+        Acara::find(12)->delete();
+
+        return redirect('/')->with('success', 'data berhasil dihapus');
     }
 }

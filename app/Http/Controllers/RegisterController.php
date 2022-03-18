@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Acara;
-use App\Models\Acaras;
-use App\Models\News;
-use App\Models\Role;
+use App\Models\Register;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
-class DashboardController extends Controller
+class RegisterController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,16 +16,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        
-        $tgl = date('Y-m-d');
-        $dt = Carbon::create($tgl);
-        return view('dashboard.index', [
-            'data' => Acara::with(['news', 'status'])->get(),
-            'datas' => Acara::where('executing', $tgl)->get(),
-            'dt' => $dt,
-            'news' => News::latest('id')->get(),
-            // where('organizer', '2022-03-09')->andWhere('organizer', 'ukm')->count()
-        ]);
+        return view('register.index');
     }
 
     /**
@@ -49,16 +37,30 @@ class DashboardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email:dns|unique:users',
+            'password' => 'required|min:3|max:255',
+            'confirm' => 'required|same:password'
+        ]);
+
+        $validatedData['password'] = Hash::make($validatedData['password']);
+
+        User::create($validatedData);
+        // $request->session()->flash('success', 'registrasi berhasil harap login ulang');
+
+        return redirect('/login')->with('success', 'registrasi berhasil harap login ulang');
     }
+    
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Register  $register
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Register $register)
     {
         //
     }
@@ -66,10 +68,10 @@ class DashboardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Register  $register
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Register $register)
     {
         //
     }
@@ -78,10 +80,10 @@ class DashboardController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Register  $register
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Register $register)
     {
         //
     }
@@ -89,10 +91,10 @@ class DashboardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Register  $register
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Register $register)
     {
         //
     }

@@ -22,7 +22,17 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => bcrypt('qwe'), // password
-            'role' => mt_rand(1, 3),
+            'role_id' => mt_rand(1, 3),
+            'about' => $this->faker->realText($maxNbChars = 200, $indexSize = 2),
+            'fullname' => $this->faker->name(),
+            'company' => $this->faker->company(),
+            'job' => $this->faker->jobTitle(),
+            'country' => $this->faker->country() ,
+            'address' => $this->faker->address(),
+            'tweet' => $this->faker->word(),
+            'fb' => $this->faker->word(),
+            'ig' => $this->faker->word(),
+            'in' => $this->faker->word(),
             'contact' => $this->faker->phoneNumber(),
         ];
     }

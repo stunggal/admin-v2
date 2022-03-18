@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Acara;
 use Illuminate\Http\Request;
 
 class ListacaraController extends Controller
@@ -13,7 +14,9 @@ class ListacaraController extends Controller
      */
     public function index()
     {
-        return view('list-acara.index');
+        return view('list-acara.index', [
+            'data' => Acara::with(['news', 'status'])->get(),
+        ]);
     }
 
     /**

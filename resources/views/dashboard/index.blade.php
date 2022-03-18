@@ -31,14 +31,13 @@
                                         <li class="dropdown-header text-start">
                                             <h6>More</h6>
                                         </li>
-                                        <li><a class="dropdown-item" href="#">see all</a></li>
+                                        <li><a class="dropdown-item" href="/list">see all</a></li>
                                     </ul>
                                 </div>
 
                                 <div class="card-body">
                                     <h5 class="card-title">UKM
-                                        {{ $d = $data->where('organizer', 'like', 'ukm')->count() }}
-                                        <span>| Events {{ date('Y-m-d h:m:s') }} </span>
+                                        <span>| Events </span>
                                     </h5>
 
                                     <div class="d-flex align-items-center">
@@ -48,8 +47,9 @@
                                         </div>
                                         <div class="ps-3">
                                             <h6>{{ $data->where('organizer', 'ukm')->count() }}</h6>
-                                            <span class="text-success small pt-1 fw-bold">12</span> <span
-                                                class="text-muted small pt-2 ps-1">events today</span>
+                                            <span
+                                                class="text-success small pt-1 fw-bold">{{ $datas->where('organizer', 'ukm')->count() }}</span>
+                                            <span class="text-muted small pt-2 ps-1">events today</span>
 
                                         </div>
                                     </div>
@@ -69,7 +69,7 @@
                                         <li class="dropdown-header text-start">
                                             <h6>Filter</h6>
                                         </li>
-                                        <li><a class="dropdown-item" href="#">see all</a></li>
+                                        <li><a class="dropdown-item" href="/list">see all</a></li>
                                     </ul>
                                 </div>
 
@@ -82,9 +82,10 @@
                                             <i class="bi ri-user-line"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <h6>{{ $data->where('organizer', 'departemen')->count() }}</h6>
-                                            <span class="text-success small pt-1 fw-bold">8</span> <span
-                                                class="text-muted small pt-2 ps-1">events today</span>
+                                            <h6>{{ $data->where('organizer', 'departement')->count() }}</h6>
+                                            <span
+                                                class="text-success small pt-1 fw-bold">{{ $datas->where('organizer', 'departement')->count() }}</span>
+                                            <span class="text-muted small pt-2 ps-1">events today</span>
 
                                         </div>
                                     </div>
@@ -106,7 +107,7 @@
                                             <h6>Filter</h6>
                                         </li>
 
-                                        <li><a class="dropdown-item" href="#">see all</a></li>
+                                        <li><a class="dropdown-item" href="/list">see all</a></li>
                                     </ul>
                                 </div>
 
@@ -120,8 +121,10 @@
                                         </div>
                                         <div class="ps-3">
                                             <h6>{{ $data->where('organizer', 'hmp')->count() }}</h6>
-                                            <span class="text-danger small pt-1 fw-bold">12</span> <span
-                                                class="text-muted small pt-2 ps-1">events today</span>
+                                            <span
+                                                class="text-danger small pt-1 fw-bold">{{ $datas->where('organizer', 'hmp')->count() }}</span>
+                                            <span class="text-muted small pt-2 ps-1">events today
+                                            </span>
 
                                         </div>
                                     </div>
@@ -143,7 +146,7 @@
                                             <h6>More</h6>
                                         </li>
 
-                                        <li><a class="dropdown-item" href="#">see all</a></li>
+                                        <li><a class="dropdown-item" href="/list">see all</a></li>
                                     </ul>
                                 </div>
 
@@ -152,6 +155,11 @@
 
                                     <table class="table table-borderless datatable">
                                         <thead>
+                                            @if (session()->has('success'))
+                                                <div class="alert alert-success" role="alert">
+                                                    {{ session('success') }}
+                                                </div>
+                                            @endif
                                             <tr>
                                                 <th scope="col">id</th>
                                                 <th scope="col">Event's name</th>
@@ -172,7 +180,13 @@
                                                             class="badge bg-{{ $d->status->name === 'aproved' ? 'primary' : '' }}{{ $d->status->name === 'pending' ? 'danger' : '' }}{{ $d->status->name === 'started' ? 'success' : '' }}{{ $d->status->name === 'finished' ? 'dark' : '' }} ">{{ $d->status->name }}</span>
                                                     </td>
                                                     <td>
-                                                        <a href=" #" class="badge bg-success">see</a>
+                                                        <form action="/delete/{{ $d->id }}" method="post"
+                                                            class="d-inline">
+                                                            @method('delete')
+                                                            @csrf
+                                                            <button class="badge bg-danger border-0"
+                                                                onclick="return confirm('apakah anda yakin')">delete</button>
+                                                        </form>
                                                         <a href="#" class="badge bg-primary">update</a>
                                                     </td>
                                                 </tr>
@@ -201,12 +215,12 @@
                                     <h6>More</h6>
                                 </li>
 
-                                <li><a class="dropdown-item" href="#">see all</a></li>
+                                <li><a class="dropdown-item" href="/list">see all</a></li>
                             </ul>
                         </div>
 
                         <div class="card-body">
-                            <h5 class="card-title">Timeline <span>| Events</span></h5>
+                            <h5 class="card-title">Jadwal acara <span>| Events</span></h5>
 
                             <div class="activity">
 
@@ -214,7 +228,11 @@
                                     <div class="activite-label">today</div>
                                     <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
                                     <div class="activity-content">
-                                        <a href="#" class="fw-bold text-dark">FESDA</a> festival unida darussalam gontor
+                                        {{-- <a href="#" class="fw-bold text-dark">FESDA {{ $dt->toDateString() }} |
+                                            {{ $d->executing }}</a> --}}
+                                        @foreach ($data as $d)
+                                            {{ $dt->toDateString() === $d->executing ? $d->name . ',' : '' }}
+                                        @endforeach
                                     </div>
                                 </div><!-- End activity item-->
 
@@ -222,7 +240,12 @@
                                     <div class="activite-label">2 days</div>
                                     <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
                                     <div class="activity-content">
-                                        Voluptatem blanditiis blanditiis eveniet
+                                        @php
+                                            $dt->addDays(1);
+                                        @endphp
+                                        @foreach ($data as $d)
+                                            {{ $dt->toDateString() === $d->executing ? $d->name . ',' : '' }}
+                                        @endforeach
                                     </div>
                                 </div><!-- End activity item-->
 
@@ -230,7 +253,12 @@
                                     <div class="activite-label">3 days</div>
                                     <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
                                     <div class="activity-content">
-                                        Voluptates corrupti molestias voluptatem
+                                        @php
+                                            $dt->addDays(1);
+                                        @endphp
+                                        @foreach ($data as $d)
+                                            {{ $dt->toDateString() === $d->executing ? $d->name . ',' : '' }}
+                                        @endforeach
                                     </div>
                                 </div><!-- End activity item-->
 
@@ -238,26 +266,54 @@
                                     <div class="activite-label">4 days</div>
                                     <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
                                     <div class="activity-content">
-                                        Tempore autem saepe <a href="#" class="fw-bold text-dark">occaecati voluptatem</a>
-                                        tempore
+                                        @php
+                                            $dt->addDays(1);
+                                        @endphp
+                                        @foreach ($data as $d)
+                                            {{ $dt->toDateString() === $d->executing ? $d->name . ',' : '' }}
+                                        @endforeach
                                     </div>
                                 </div><!-- End activity item-->
 
                                 <div class="activity-item d-flex">
-                                    <div class="activite-label">8 days</div>
+                                    <div class="activite-label">5 days</div>
                                     <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
                                     <div class="activity-content">
-                                        Est sit eum reiciendis exercitationem
+                                        @php
+                                            $dt->addDays(1);
+                                        @endphp
+                                        @foreach ($data as $d)
+                                            {{ $dt->toDateString() === $d->executing ? $d->name . ',' : '' }}
+                                        @endforeach
                                     </div>
                                 </div><!-- End activity item-->
 
                                 <div class="activity-item d-flex">
-                                    <div class="activite-label">12 days </div>
+                                    <div class="activite-label">6 days </div>
                                     <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
                                     <div class="activity-content">
-                                        Dicta dolorem harum nulla eius. Ut quidem quidem sit quas
+                                        @php
+                                            $dt->addDays(1);
+                                        @endphp
+                                        @foreach ($data as $d)
+                                            {{ $dt->toDateString() === $d->executing ? $d->name . ',' : '' }}
+                                        @endforeach
                                     </div>
-                                </div><!-- End activity item-->
+                                </div>
+
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">7 days </div>
+                                    <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
+                                    <div class="activity-content">
+                                        @php
+                                            $dt->addDays(1);
+                                        @endphp
+                                        @foreach ($data as $d)
+                                            {{ $dt->toDateString() === $d->executing ? $d->name . ',' : '' }}
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <!-- End activity item-->
 
                             </div>
 
@@ -274,7 +330,7 @@
                                     <h6>More</h6>
                                 </li>
 
-                                <li><a class="dropdown-item" href="#">see all</a></li>
+                                <li><a class="dropdown-item" href="/list">see all</a></li>
                             </ul>
                         </div>
 
@@ -284,32 +340,32 @@
                             <div class="news">
                                 <div class="post-item clearfix">
                                     <img src="assets/img/news-1.jpg" alt="">
-                                    <h4><a href="#">Nihil blanditiis at in nihil autem</a></h4>
-                                    <p>Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
+                                    <h4><a href="#">{{ $news->first()->title }}</a></h4>
+                                    <p>{{ $news->first()->body }}</p>
                                 </div>
 
                                 <div class="post-item clearfix">
                                     <img src="assets/img/news-2.jpg" alt="">
-                                    <h4><a href="#">Quidem autem et impedit</a></h4>
-                                    <p>Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
+                                    <h4><a href="#">{{ $news->skip(1)->first()->title }}</a></h4>
+                                    <p>{{ $news->skip(1)->first()->body }}</p>
                                 </div>
 
                                 <div class="post-item clearfix">
                                     <img src="assets/img/news-3.jpg" alt="">
-                                    <h4><a href="#">Id quia et et ut maxime similique occaecati ut</a></h4>
-                                    <p>Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
+                                    <h4><a href="#">{{ $news->skip(2)->first()->title }}</a></h4>
+                                    <p>{{ $news->skip(2)->first()->body }}</p>
                                 </div>
 
                                 <div class="post-item clearfix">
                                     <img src="assets/img/news-4.jpg" alt="">
-                                    <h4><a href="#">Laborum corporis quo dara net para</a></h4>
-                                    <p>Qui enim quia optio. Eligendi aut asperiores enim repellendusvel rerum cuder...</p>
+                                    <h4><a href="#">{{ $news->skip(3)->first()->title }}</a></h4>
+                                    <p>{{ $news->skip(3)->first()->body }}</p>
                                 </div>
 
                                 <div class="post-item clearfix">
                                     <img src="assets/img/news-5.jpg" alt="">
-                                    <h4><a href="#">Et dolores corrupti quae illo quod dolor</a></h4>
-                                    <p>Odit ut eveniet modi reiciendis. Atque cupiditate libero beatae dignissimos eius...
+                                    <h4><a href="#">{{ $news->skip(4)->first()->title }}</a></h4>
+                                    <p>{{ $news->skip(4)->first()->body }}
                                     </p>
                                 </div>
 

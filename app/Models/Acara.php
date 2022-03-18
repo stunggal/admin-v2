@@ -9,6 +9,22 @@ class Acara extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'executing',
+        'time',
+        'organizer',
+        'status_id',
+        'responsible_id',
+        'provedby_id',
+        'staff_id',
+        'news_id',
+        'comitte_id',
+        'participant_id',
+        'place',
+        'about',
+    ];
+
     protected $guard = [
         'id',
     ];

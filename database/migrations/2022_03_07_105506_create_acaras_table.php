@@ -16,15 +16,17 @@ return new class extends Migration
         Schema::create('acaras', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->timestamp('executing');
+            $table->string('about')->nullable();
+            $table->date('executing');
+            $table->string('time')->nullable();
             $table->string('organizer');
-            $table->foreignId('status_id');
-            $table->foreignId('responsible');
-            $table->foreignId('aproved_by');
-            $table->foreignId('staff');
-            $table->foreignId('news_id');
-            $table->foreignId('comitte');
-            $table->foreignId('participant');
+            $table->foreignId('status_id')->default('1');
+            $table->foreignId('responsible_id');
+            $table->foreignId('aprovedby_id')->nullable();
+            $table->foreignId('staff_id')->nullable();
+            $table->foreignId('news_id')->nullable();
+            $table->foreignId('comitte_id')->nullable();
+            $table->foreignId('participant_id')->nullable();
             $table->string('place');
             $table->timestamps();
         });

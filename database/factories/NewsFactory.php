@@ -17,8 +17,8 @@ class NewsFactory extends Factory
     public function definition()
     {
         return [
-            'event_id' => mt_rand(1, 10),
-            'title' => $this->faker->sentence(),
+            'title' => $this->faker->word(),
+            'body' => $this->faker->text(),
             'file' => $this->faker->mimeType(),
         ];
     }
